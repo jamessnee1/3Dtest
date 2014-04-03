@@ -308,13 +308,13 @@ void display()
 
 int main(int argc, const char * argv[]){
     
-    NSLog(@"Application running\n");
+    
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
     
     glutInitWindowSize(800, 600);
     glutInitWindowPosition(200, 100);
-    glutCreateWindow("Tutorial 3");
+    glutCreateWindow("3D Test");
     
     /* In this program these OpenGL calls only need to be done once,
      so they are in main rather than display. */
@@ -332,9 +332,7 @@ int main(int argc, const char * argv[]){
     
     return EXIT_SUCCESS;
     
-    
-    
-    return NSApplicationMain(argc, argv);
+
 }
 
 
