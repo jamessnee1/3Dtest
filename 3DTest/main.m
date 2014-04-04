@@ -19,7 +19,9 @@ void reshape(int width, int height);
 void idle();
 void drawLines();
 void drawSineWave();
+void drawCube();
 void drawSurface();
+void drawNormals();
 void mouseMove(int x, int y);
 void mouse(int button, int state, int x, int y);
 void keyDown(unsigned char key, int x, int y);
@@ -29,14 +31,153 @@ void drawTeapot();
 /*Global variables for x/y/z coords*/
 float cameraX = 0.0, cameraY = 0.0, cameraZ = 0.0;
 /*booleans*/
-int isFilled = 0, lines = 0, flat = 0;
+int isFilled = 0, lines = 0, flat = 0, n = 0;
 
-float lastXpos = 0.0, lastYpos = 0.0, lastZpos = 0.0;
+/*floats for rotation*/
+float rotate_x = 0.0, rotate_y = 0.0, move_z = 0.0;
 
 /*floats for teapot position*/
 float tX = 0.0, tY = 0.0, tZ = 0.0;
-/*animation speed with delta*/
-float deltaX = 0.0001, deltaY = 0.0001, deltaZ = 0.0001;
+
+/*camera globals*/
+/*Angle of rotation for camera direction*/
+float angle = 0.0;
+/*vector representing camera direction*/
+float lx =0.0f, ly = 0.0f, lz = 0.0f;
+/*position of camera*/
+float x = 0.5f, y = 0.5f, z = 2.5f;
+float deltaAngle = 0.0f;
+int xOrigin = -1;
+
+
+void drawCube(){
+    
+    /*rotate controls*/
+    glRotatef( rotate_x, 1.0, 0.0, 0.0 );
+    glRotatef( rotate_y, 0.0, 1.0, 0.0 );
+    
+    /*movement controls*/
+    glTranslatef(0, 0, move_z);
+ 
+
+    /*Front side*/
+    glBegin(GL_POLYGON);
+    glVertex3f( -0.1, -0.1, -0.1);
+    glVertex3f( -0.1,  0.1, -0.1);
+    glVertex3f(  0.1,  0.1, -0.1);
+    glVertex3f(  0.1, -0.1, -0.1);
+    glEnd();
+    
+    /*Back side*/
+    glBegin(GL_POLYGON);
+    glVertex3f(  0.1, -0.1, 0.1 );
+    glVertex3f(  0.1,  0.1, 0.1 );
+    glVertex3f( -0.1,  0.1, 0.1 );
+    glVertex3f( -0.1, -0.1, 0.1 );
+    glEnd();
+    
+    /*Right side*/
+    glBegin(GL_POLYGON);
+    glVertex3f( 0.1, -0.1, -0.1 );
+    glVertex3f( 0.1,  0.1, -0.1 );
+    glVertex3f( 0.1,  0.1,  0.1 );
+    glVertex3f( 0.1, -0.1,  0.1 );
+    glEnd();
+    
+    /*Left side*/
+    glBegin(GL_POLYGON);
+    glVertex3f( -0.1, -0.1,  0.1 );
+    glVertex3f( -0.1,  0.1,  0.1 );
+    glVertex3f( -0.1,  0.1, -0.1 );
+    glVertex3f( -0.1, -0.1, -0.1 );
+    glEnd();
+    
+    /*Top side*/
+    glBegin(GL_POLYGON);
+    glVertex3f(  0.1,  0.1,  0.1 );
+    glVertex3f(  0.1,  0.1, -0.1 );
+    glVertex3f( -0.1,  0.1, -0.1 );
+    glVertex3f( -0.1,  0.1,  0.1 );
+    glEnd();
+    
+    /*Bottom side*/
+    glBegin(GL_POLYGON);
+    glVertex3f(  0.1, -0.1, -0.1 );
+    glVertex3f(  0.1, -0.1,  0.1 );
+    glVertex3f( -0.1, -0.1,  0.1 );
+    glVertex3f( -0.1, -0.1, -0.1 );
+    glEnd();
+    
+    glutPostRedisplay();
+
+    
+}
+
+void drawNormals(){
+    
+    if (n == 1){
+        
+        glColor3f(1, 1, 0);
+        glVertex3f(0, 0, 0.001);
+        
+    }
+    
+    glColor3f(1, 1, 1);
+    glutPostRedisplay();
+    
+}
+
+void drawSurface(){
+    
+    float x1 = 0.1, y1 = 0.1, x2 = -0.1, y2 = -0.1, step = 0.2;
+    float x = -1.0, y = -0.2, z = -1.0;
+    
+    /*glRotatef(cameraX, 0, 1, 0);
+    glRotatef(cameraY, 1, 0, 0);*/
+    
+    glColor3f(1, 1, 1);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    /* Enable lighting */
+    /*glEnable(GL_LIGHTING);
+     glEnable(GL_LIGHT0);
+     glEnable(GL_LIGHT1);
+     glEnable(GL_NORMALIZE);*/
+    
+    
+    for (x = -1; x <= 1; x += step){
+        
+        
+        glBegin(GL_TRIANGLE_STRIP);
+        glVertex3f(x , y , z); /*top left*/
+        drawNormals();
+        glVertex3f(x+step,y, z);  /*top right*/
+        drawNormals();
+        glVertex3f(x, y, z+step); /*bottom left*/
+        drawNormals();
+        glVertex3f(x+step, y, z+step); /*bottom right*/
+        drawNormals();
+        glEnd();
+        
+        for (z = -1; z <= 1; z += step){
+            
+            
+            glBegin(GL_TRIANGLE_STRIP);
+            glVertex3f(x , y ,z); /*top left*/
+            drawNormals();
+            glVertex3f(x+step,y, z);  /*top right*/
+            drawNormals();
+            glVertex3f(x, y, z+step); /*bottom left*/
+            drawNormals();
+            glVertex3f(x+step, y, z+step); /*bottom right*/
+            drawNormals();
+            glEnd();
+        }
+    }
+    
+    
+    glutPostRedisplay();
+    
+}
 
 
 void idle(){
@@ -89,21 +230,25 @@ void keyDown(unsigned char key, int x, int y){
             
         case 'w': /* up */
             tZ -=0.01;
+            move_z -=0.01;
             printf ("tZ is %f\n", tZ);
             break;
             
         case 's': /* down */
             tZ +=0.01;
+            move_z += 0.01;
             printf ("tZ is %f\n", tZ);
             break;
             
         case 'a': /* left */
             tX -= 0.01;
+            rotate_y -= 1.0;
             printf ("tX is %f\n", tX);
             break;
             
         case 'd': /* right */
             tX += 0.01;
+            rotate_y += 1.0;
             printf ("tX is %f\n", tX);
             break;
             
@@ -113,6 +258,15 @@ void keyDown(unsigned char key, int x, int y){
             }
             else {
                 flat = 0;
+            }
+            break;
+            
+        case 'n': /*normals*/
+            if (n == 0){
+                n = 1;
+            }
+            else {
+                n = 0;
             }
             break;
             
@@ -130,9 +284,20 @@ void keyUp(unsigned char key, int x, int y){
 
 void mouseMove(int x, int y){
     
-    cameraX = x;
+    if (xOrigin >= 0){
+    
+        deltaAngle = (x - xOrigin ) * 0.001f;
+        
+        lx = sin(angle + deltaAngle);
+        lz = -cos(angle + deltaAngle);
+        
+        
+        
+    }
+    
+    /*cameraX = x;
     cameraY = y;
-    printf("Mouse x = %i, Mouse y = %i\n", x, y);
+    printf("Mouse x = %i, Mouse y = %i\n", x, y);*/
     glutPostRedisplay();
     
 }
@@ -140,18 +305,23 @@ void mouseMove(int x, int y){
 void mouse(int button, int state, int x, int y){
     
     if (button == GLUT_LEFT_BUTTON){
-        cameraX = x;
-        cameraY = y;
-        printf("Mouse x = %i, Mouse y = %i\n", x, y);
-        glutPostRedisplay();
-        
-    }
-    if (button == GLUT_RIGHT_BUTTON){
-        glTranslatef(cameraX, 0, 0);
-        glTranslatef(0, cameraY, 0);
-        
-    }
     
+        if (state == GLUT_UP){
+        
+            angle += deltaAngle;
+            xOrigin = -1;
+        
+        }
+        else {
+        
+            xOrigin = x;
+        
+        }
+    
+        
+        
+    
+    }
 }
 
 void drawTeapot(){
@@ -204,21 +374,6 @@ void drawTeapot(){
     }
     
     glutPostRedisplay();
-}
-
-void drawSurface(){
-    
-    glColor3f(1, 0, 0);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glBegin(GL_QUADS);
-    glVertex3f(-0.1f, 0.1f, -0.10f);
-    glVertex3f(0.1f, 0.1f, -0.10f);
-    glVertex3f(0.1f,-0.1f, -0.10f);
-    glVertex3f(-0.1f ,-0.1f ,-0.10f);
-    glEnd();
-    
-    glutPostRedisplay();
-    
 }
 
 void drawLines(){
@@ -287,13 +442,23 @@ void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
+    /*set camera orientation*/
+    glMatrixMode(GL_MODELVIEW);
+    
     /* load identity*/
     glLoadIdentity();
     
+    /*gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ)*/
+    gluLookAt(x,y,z, x+lx,y+ly,z+lz, 0,1,0);
     
     /* Put functions to draw in here */
     drawLines();
-    drawTeapot();
+    drawSurface();
+    drawCube();
+    /*drawTeapot();*/
+    
+    
+    
     /*drawSineWave();*/
     
     int err;

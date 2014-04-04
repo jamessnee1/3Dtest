@@ -10,7 +10,6 @@
 		595F146318ED1B680055D8BD /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 595F146218ED1B680055D8BD /* Cocoa.framework */; };
 		595F146D18ED1B680055D8BD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 595F146B18ED1B680055D8BD /* InfoPlist.strings */; };
 		595F146F18ED1B680055D8BD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 595F146E18ED1B680055D8BD /* main.m */; };
-		595F147318ED1B680055D8BD /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 595F147118ED1B680055D8BD /* Credits.rtf */; };
 		595F147618ED1B680055D8BD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 595F147518ED1B680055D8BD /* AppDelegate.m */; };
 		595F147918ED1B680055D8BD /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 595F147718ED1B680055D8BD /* MainMenu.xib */; };
 		595F147B18ED1B680055D8BD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 595F147A18ED1B680055D8BD /* Images.xcassets */; };
@@ -40,7 +39,6 @@
 		595F146C18ED1B680055D8BD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		595F146E18ED1B680055D8BD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		595F147018ED1B680055D8BD /* 3DTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "3DTest-Prefix.pch"; sourceTree = "<group>"; };
-		595F147218ED1B680055D8BD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		595F147418ED1B680055D8BD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		595F147518ED1B680055D8BD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		595F147818ED1B680055D8BD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -131,7 +129,6 @@
 				595F146B18ED1B680055D8BD /* InfoPlist.strings */,
 				595F146E18ED1B680055D8BD /* main.m */,
 				595F147018ED1B680055D8BD /* 3DTest-Prefix.pch */,
-				595F147118ED1B680055D8BD /* Credits.rtf */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -232,7 +229,6 @@
 			files = (
 				595F146D18ED1B680055D8BD /* InfoPlist.strings in Resources */,
 				595F147B18ED1B680055D8BD /* Images.xcassets in Resources */,
-				595F147318ED1B680055D8BD /* Credits.rtf in Resources */,
 				595F147918ED1B680055D8BD /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -282,14 +278,6 @@
 				595F146C18ED1B680055D8BD /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		595F147118ED1B680055D8BD /* Credits.rtf */ = {
-			isa = PBXVariantGroup;
-			children = (
-				595F147218ED1B680055D8BD /* en */,
-			);
-			name = Credits.rtf;
 			sourceTree = "<group>";
 		};
 		595F147718ED1B680055D8BD /* MainMenu.xib */ = {
@@ -466,6 +454,7 @@
 				595F149218ED1B690055D8BD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		595F149318ED1B690055D8BD /* Build configuration list for PBXNativeTarget "3DTestTests" */ = {
 			isa = XCConfigurationList;
@@ -474,6 +463,7 @@
 				595F149518ED1B690055D8BD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
