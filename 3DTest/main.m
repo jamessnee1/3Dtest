@@ -54,8 +54,9 @@ void drawCube(){
     
     
     /*rotate controls*/
-    glRotatef( rotate_x, 1.0, 0.0, 0.0 );
-    glRotatef( rotate_y, 0.0, 1.0, 0.0 );
+    glRotatef(rotate_x, 1.0, 0.0, 0.0 );
+    glRotatef(rotate_y, 0.0, 1.0, 0.0 );
+
     
     
     /*movement controls*/
@@ -242,25 +243,25 @@ void keyDown(unsigned char key, int x, int y){
         case 'w': /* up */
             tZ -=0.01;
             move_z -=0.01;
-            printf ("tZ is %f\n", tZ);
+            printf ("move_z is %f\n", move_z);
             break;
             
         case 's': /* down */
             tZ +=0.01;
             move_z += 0.01;
-            printf ("tZ is %f\n", tZ);
+            printf ("move_z is %f\n", move_z);
             break;
             
         case 'a': /* left */
             tX -= 0.01;
-            rotate_y -= 1.0;
-            printf ("tX is %f\n", tX);
+            rotate_y += 1.0;
+            printf ("rotate_x is %f\n", rotate_y);
             break;
             
         case 'd': /* right */
             tX += 0.01;
-            rotate_y += 1.0;
-            printf ("tX is %f\n", tX);
+            rotate_y -= 1.0;
+            printf ("rotate_x is %f\n", rotate_y);
             break;
             
         case 'm': /*for shader model*/
@@ -294,6 +295,10 @@ void keyUp(unsigned char key, int x, int y){
 }
 
 void mouseMove(int x, int y){
+    
+    printf("DeltaAngle: %f\n", deltaAngle);
+    printf("x: %i\n", x);
+    printf("y: %i\n", y);
     
     if (xOrigin >= 0){
     
@@ -475,7 +480,7 @@ void display()
     
     /*gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ)*/
     /*this function controls the camera*/
-    gluLookAt(x,y,z, x+lx,y+ly,z+lz, 0,1,0);
+    gluLookAt(x,y,z, x+lx,y+ly,move_z, 0,1,0);
     
     /* Put functions to draw in here */
     drawLines();
