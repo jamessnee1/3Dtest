@@ -47,14 +47,16 @@ float lx =0.0f, ly = 0.0f, lz = 0.0f;
 /*position of camera*/
 float x = 0.5f, y = 0.5f, z = 2.5f;
 float deltaAngle = 0.0f;
-int xOrigin = -1;
+int xOrigin = -1, zOrigin = -1;
 
 
 void drawCube(){
     
+    
     /*rotate controls*/
     glRotatef( rotate_x, 1.0, 0.0, 0.0 );
     glRotatef( rotate_y, 0.0, 1.0, 0.0 );
+    
     
     /*movement controls*/
     glTranslatef(0, 0, move_z);
@@ -124,7 +126,8 @@ void drawNormals(){
     if (n == 1){
         
         glColor3f(1, 1, 0);
-        glVertex3f(0, 0, 0.001);
+        glVertex3f(0, 0, 0);
+        glVertex3f(0, 0.001, 0);
         
     }
     
@@ -157,11 +160,11 @@ void drawSurface(){
         glVertex3f(x , y , z); /*top left*/
         drawNormals();
         glVertex3f(x+step,y, z);  /*top right*/
-        drawNormals();
+        
         glVertex3f(x, y, z+step); /*bottom left*/
-        drawNormals();
+        
         glVertex3f(x+step, y, z+step); /*bottom right*/
-        drawNormals();
+        
         glEnd();
         
         for (z = -1; z <= 1; z += step){
@@ -169,13 +172,13 @@ void drawSurface(){
             
             glBegin(GL_TRIANGLE_STRIP);
             glVertex3f(x , y ,z); /*top left*/
-            drawNormals();
+            
             glVertex3f(x+step,y, z);  /*top right*/
-            drawNormals();
+            
             glVertex3f(x, y, z+step); /*bottom left*/
-            drawNormals();
+            
             glVertex3f(x+step, y, z+step); /*bottom right*/
-            drawNormals();
+            
             glEnd();
         }
     }
@@ -303,6 +306,12 @@ void mouseMove(int x, int y){
         
     }
     
+    if (zOrigin <= 0){
+    
+        deltaAngle = (y - zOrigin) * 0.001f;
+        ly = -tan(angle + deltaAngle);
+    }
+    
     /*cameraX = x;
     cameraY = y;
     printf("Mouse x = %i, Mouse y = %i\n", x, y);*/
@@ -325,9 +334,16 @@ void mouse(int button, int state, int x, int y){
             xOrigin = x;
         
         }
+    }
     
+    if (button == GLUT_RIGHT_BUTTON){
+    
+        if (state == GLUT_UP){
+            
+            angle += deltaAngle;
+            zOrigin = -1;
         
-        
+        }
     
     }
     glutPostRedisplay();
@@ -458,6 +474,7 @@ void display()
     glLoadIdentity();
     
     /*gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ)*/
+    /*this function controls the camera*/
     gluLookAt(x,y,z, x+lx,y+ly,z+lz, 0,1,0);
     
     /* Put functions to draw in here */
@@ -465,9 +482,6 @@ void display()
     drawSurface();
     drawCube();
     /*drawTeapot();*/
-    
-    
-    
     /*drawSineWave();*/
     
     
