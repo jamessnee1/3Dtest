@@ -108,6 +108,12 @@ void drawCube(){
     glVertex3f( -0.1, -0.1, -0.1 );
     glEnd();
     
+    
+    /*draw lines on cube*/
+    if (lines == 1){
+        drawLines();
+    }
+    
     glutPostRedisplay();
 
     
@@ -197,6 +203,8 @@ void reshape(int width, int height){
     /*gluPerspective(fovy, aspect, znear,zfar)*/
     gluPerspective(75, ((float)width / (float) height), 0.01, 100);
     glMatrixMode(GL_MODELVIEW);
+    
+    glutPostRedisplay();
     
 }
 
@@ -322,6 +330,7 @@ void mouse(int button, int state, int x, int y){
         
     
     }
+    glutPostRedisplay();
 }
 
 void drawTeapot(){
@@ -460,6 +469,8 @@ void display()
     
     
     /*drawSineWave();*/
+    
+    
     
     int err;
     const GLubyte *errString;
