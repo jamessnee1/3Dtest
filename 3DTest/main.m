@@ -1,17 +1,11 @@
-//
-//  main.m
-//  3DTest
-//
-//  Created by James Snee on 3/04/2014.
-//  Copyright (c) 2014 JSS Software. All rights reserved.
-//
+
 
 #import <Cocoa/Cocoa.h>
 #import <GLKit/GLKit.h>
 #import <GLUT/GLUT.h>
 
 #define DEBUG
-#undef DEBUG /*DEBUG is turned off*/
+ /*DEBUG is turned off*/
 #define PI 3.14
 
 /*Function Prototypes*/
@@ -28,40 +22,33 @@ void keyDown(unsigned char key, int x, int y);
 void keyUp(unsigned char key, int x, int y);
 void drawTeapot();
 
-/*Global variables for x/y/z coords*/
-float cameraX = 0.0, cameraY = 0.0, cameraZ = 0.0;
 /*booleans*/
 int isFilled = 0, lines = 0, flat = 0, n = 0;
 
-/*floats for rotation*/
+/*floats for cube rotation*/
 float rotate_x = 0.0, rotate_y = 0.0, move_z = 0.0;
 
-/*floats for teapot position*/
-float tX = 0.0, tY = 0.0, tZ = 0.0;
+float angle_x;
+
+/*floats for object position*/
+float oX = 0.0, oY = 0.0, oZ = 0.0;
+/*cameraX, Y and Z only for teapot*/
+float cameraX = 0.0, cameraY = 0.0, cameraZ = 0.0;
 
 /*camera globals*/
-/*Angle of rotation for camera direction*/
-float angle = 0.0;
-/*vector representing camera direction*/
-float lx =0.0f, ly = 0.0f, lz = 0.0f;
-/*position of camera*/
 float x = 0.5f, y = 0.5f, z = 2.5f;
-float deltaAngle = 0.0f;
-int xOrigin = -1, zOrigin = -1;
+float zoom, rotx, roty, tx, ty;
 
 
 void drawCube(){
     
-    
-    /*rotate controls*/
-    glRotatef(rotate_x, 1.0, 0.0, 0.0 );
-    glRotatef(rotate_y, 0.0, 1.0, 0.0 );
-
-    
-    
     /*movement controls*/
     glTranslatef(0, 0, move_z);
- 
+    
+    /*rotate controls*/
+    glRotatef(rotate_x, 0.0, 1.0, 0.0 );
+    angle_x = sin(rotate_x);
+    
 
     /*Front side*/
     glBegin(GL_POLYGON);
@@ -126,9 +113,9 @@ void drawNormals(){
     
     if (n == 1){
         
-        glColor3f(1, 1, 0);
-        glVertex3f(0, 0, 0);
-        glVertex3f(0, 0.001, 0);
+        glColor3f(1,1,0);
+        glVertex3f(0, 0.5, 0);
+        
         
     }
     
@@ -158,28 +145,28 @@ void drawSurface(){
         
         
         glBegin(GL_TRIANGLE_STRIP);
-        glVertex3f(x , y , z); /*top left*/
+        glVertex3f(x , (sin(2*x)/5) , z); /*top left*/
         drawNormals();
-        glVertex3f(x+step,y, z);  /*top right*/
-        
-        glVertex3f(x, y, z+step); /*bottom left*/
-        
-        glVertex3f(x+step, y, z+step); /*bottom right*/
-        
+        glVertex3f(x+step,(sin(2*(x+step))/5), z); /*top right*/
+        drawNormals();
+        glVertex3f(x, (sin(2*x)/5), z+step); /*bottom left*/
+        drawNormals();
+        glVertex3f(x+step, (sin(2*(x+step))/5), z+step); /*bottom right*/
+        drawNormals();
         glEnd();
         
         for (z = -1; z <= 1; z += step){
             
             
             glBegin(GL_TRIANGLE_STRIP);
-            glVertex3f(x , y ,z); /*top left*/
-            
-            glVertex3f(x+step,y, z);  /*top right*/
-            
-            glVertex3f(x, y, z+step); /*bottom left*/
-            
-            glVertex3f(x+step, y, z+step); /*bottom right*/
-            
+            glVertex3f(x , (sin(2*x)/5) ,z); /*top left*/
+            drawNormals();
+            glVertex3f(x+step,(sin(2*(x+step))/5), z); /*top right*/
+            drawNormals();
+            glVertex3f(x, (sin(2*x)/5), z+step); /*bottom left*/
+            drawNormals();
+            glVertex3f(x+step, (sin(2*(x+step))/5), z+step); /*bottom right*/
+            drawNormals();
             glEnd();
         }
     }
@@ -198,8 +185,10 @@ void idle(){
 }
 
 void reshape(int width, int height){
-    
+
+#ifdef DEBUG
     printf("Width: %i, Height: %i\n", width, height);
+#endif
     glViewport(0, 0, width, height);
     
     glMatrixMode(GL_PROJECTION);
@@ -241,27 +230,36 @@ void keyDown(unsigned char key, int x, int y){
             break;
             
         case 'w': /* up */
-            tZ -=0.01;
+            oZ -=0.01;
             move_z -=0.01;
+            /*move_z -= 0.01 * cos(angle_x);*/
+#ifdef DEBUG
             printf ("move_z is %f\n", move_z);
+#endif
             break;
             
         case 's': /* down */
-            tZ +=0.01;
+            oZ +=0.01;
             move_z += 0.01;
+#ifdef DEBUG
             printf ("move_z is %f\n", move_z);
+#endif
             break;
             
         case 'a': /* left */
-            tX -= 0.01;
-            rotate_y += 1.0;
-            printf ("rotate_x is %f\n", rotate_y);
+            oX -= 0.01;
+            rotate_x += 1.0;
+#ifdef DEBUG
+            printf ("rotate_x is %f\n", rotate_x);
+            printf ("angle_x is %f\n", angle_x);
+#endif
             break;
             
         case 'd': /* right */
-            tX += 0.01;
-            rotate_y -= 1.0;
-            printf ("rotate_x is %f\n", rotate_y);
+            oX += 0.01;
+            rotate_x -= 1.0;
+            printf ("rotate_x is %f\n", rotate_x);
+            printf ("angle_x is %f\n", angle_x);
             break;
             
         case 'm': /*for shader model*/
@@ -296,31 +294,12 @@ void keyUp(unsigned char key, int x, int y){
 
 void mouseMove(int x, int y){
     
-    printf("DeltaAngle: %f\n", deltaAngle);
-    printf("x: %i\n", x);
-    printf("y: %i\n", y);
+    rotx = x;
+    roty = y;
+    printf("x: %i,y: %i\n", x, y);
     
-    if (xOrigin >= 0){
     
-        deltaAngle = (x - xOrigin ) * 0.001f;
-        
-        lx = sin(angle + deltaAngle);
-        lz = -cos(angle + deltaAngle);
-        
-        
-        
-    }
-    
-    if (zOrigin <= 0){
-    
-        deltaAngle = (y - zOrigin) * 0.001f;
-        ly = -tan(angle + deltaAngle);
-    }
-    
-    /*cameraX = x;
-    cameraY = y;
-    printf("Mouse x = %i, Mouse y = %i\n", x, y);*/
-    glutPostRedisplay();
+        glutPostRedisplay();
     
 }
 
@@ -328,28 +307,11 @@ void mouse(int button, int state, int x, int y){
     
     if (button == GLUT_LEFT_BUTTON){
     
-        if (state == GLUT_UP){
-        
-            angle += deltaAngle;
-            xOrigin = -1;
-        
-        }
-        else {
-        
-            xOrigin = x;
-        
-        }
     }
     
     if (button == GLUT_RIGHT_BUTTON){
     
-        if (state == GLUT_UP){
-            
-            angle += deltaAngle;
-            zOrigin = -1;
         
-        }
-    
     }
     glutPostRedisplay();
 }
@@ -381,7 +343,7 @@ void drawTeapot(){
     glRotatef(cameraY, 1, 0, 0);
     
     /*change position of teapot*/
-    glTranslatef(tX, tY, tZ);
+    glTranslatef(oX, oY, oZ);
     
     /*Keyboard controls*/
     
@@ -465,7 +427,7 @@ void drawSineWave(){
     }
     
     glEnd();
-    
+
 }
 
 void display()
@@ -477,18 +439,26 @@ void display()
     
     /* load identity*/
     glLoadIdentity();
+
     
     /*gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ)*/
     /*this function controls the camera*/
-    gluLookAt(x,y,z, x+lx,y+ly,move_z, 0,1,0);
+    gluLookAt(x,y,-z, oX,oY,-oZ, 0,1,0);
     
+    glTranslatef(0,0, -zoom);
+    glTranslatef(tx, ty, 0);
+    glRotatef(rotx, 1, 0, 0);
+    glRotatef(roty, 0, 1, 0);
+    
+    /*push and pop matrix*/
+    glPushMatrix();
     /* Put functions to draw in here */
     drawLines();
     drawSurface();
     drawCube();
     /*drawTeapot();*/
     /*drawSineWave();*/
-    
+    glPopMatrix();
     
     
     int err;
@@ -501,7 +471,7 @@ void display()
     glutSwapBuffers();
 }
 
-int main(int argc, const char * argv[]){
+int main(int argc, char **argv){
     
     
     glutInit(&argc, argv);
@@ -509,7 +479,7 @@ int main(int argc, const char * argv[]){
     
     glutInitWindowSize(800, 600);
     glutInitWindowPosition(200, 100);
-    glutCreateWindow("3D Test");
+    glutCreateWindow("James Snee I3D Assignment 1");
     
     /* In this program these OpenGL calls only need to be done once,
      so they are in main rather than display. */
