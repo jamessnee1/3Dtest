@@ -113,10 +113,11 @@ void drawNormals(){
     
     if (n == 1){
         
-        glColor3f(1,1,0);
-        glVertex3f(0, 0.5, 0);
+        glColor3f(1, 1, 0);
+        glVertex3f(0.0, 0.5, 0.0);
         
-        
+
+ 
     }
     
     glColor3f(1, 1, 1);
@@ -133,13 +134,19 @@ void drawSurface(){
     glRotatef(cameraY, 1, 0, 0);*/
     
     glColor3f(1, 1, 1);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    /* Enable lighting */
-    /*glEnable(GL_LIGHTING);
-     glEnable(GL_LIGHT0);
-     glEnable(GL_LIGHT1);
-     glEnable(GL_NORMALIZE);*/
-    
+    if (isFilled == 0){
+        glShadeModel(GL_SMOOTH);
+        glDisable(GL_LIGHTING);
+        glDisable(GL_LIGHT0);
+        glDisable(GL_NORMALIZE);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }else{
+        /* Enable lighting */
+        glShadeModel(GL_SMOOTH);
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
+        glEnable(GL_NORMALIZE);
+    }
     
     for (x = -1; x <= 1; x += step){
         
